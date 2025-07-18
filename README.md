@@ -22,3 +22,10 @@ A plataforma permitirá que clientes agendem serviços, realizem pagamentos onli
 - Barbearias  
 - Clínicas estéticas  
 - Qualquer serviço que trabalhe com agendamentos e queira controle financeiro integrado
+
+---
+
+##  Desenvolvedores
+
+-André Almeida Silva
+-Augusto de Souza Andrade
