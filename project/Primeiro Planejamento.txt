@@ -1,0 +1,80 @@
+Site de Agendamento (Título a decidir) 
+Desenvolvedores: André Almeida Silva ; Augusto de Souza Andrade
+
+
+Sugestões de Tecnologias e Funcionalidades que eu já tive ideia
+
+🧠 Arquitetura: MVC (Model-View-Controller)
+Model: lógica de negócio, regras de pagamento, agendamento, histórico de transações.
+
+View: interface em React (Next.js pode ajudar com SSR e estrutura organizada).
+
+Controller: orquestração de requisições, validações, chamadas de API externas (como o Mercado Pago).
+
+🧰 Tecnologias Sugeridas
+📦 Frontend (View)
+React (ou Next.js): para estrutura mais robusta e fácil de organizar por página.
+
+Tailwind CSS: estilização rápida e moderna.
+
+Axios / React Query: requisições e cache de dados.
+
+React Hook Form + Zod/Yup: validação de formulários.
+
+Context API ou Zustand: gerenciamento de estado leve.
+
+🖥️ Backend (Model + Controller)
+Node.js + Express ou NestJS (estrutura mais próxima do MVC clássico)
+
+TypeORM ou Prisma: ORM para manipular banco de dados de forma tipada.
+
+JWT + Bcrypt: autenticação segura para login/admins.
+
+Mercado Pago SDK: integração direta para pagamentos.
+
+🗄️ Banco de Dados
+PostgreSQL (forte com dados relacionais como agendamentos, serviços, pagamentos, caixa).
+
+Redis (opcional, para cache ou filas de notificação).
+
+🧾 Funcionalidades Planejadas
+Usuário (Cliente)
+Cadastro/login
+
+Visualização de agenda e serviços
+
+Agendamento de horário
+
+Pagamento via Mercado Pago
+
+Finalização do atendimento
+
+Profissional/Admin
+Painel de horários do dia
+
+Edição de serviços
+
+Gerenciamento de funcionários
+
+Relatório de caixa diário (entradas/saídas, formas de pagamento)
+
+📊 Relatórios & Caixa
+Fluxo de caixa: entradas (pagamentos) e saídas (cancelamentos, reembolsos, etc.)
+
+Filtro por data, funcionário, serviço
+
+Gráfico com total de agendamentos/pagamentos
+
+🔒 Autenticação & Perfis
+Usuário comum: agendamento/pagamento
+
+Funcionário: visualização dos seus atendimentos
+
+Admin/dono: caixa, relatórios, gestão
+
+📤 Deploy
+Frontend: Vercel ou Netlify
+
+Backend: Render, Railway ou Heroku
+
+Banco de Dados: Supabase, PlanetScale ou Railway (PostgreSQL)
