@@ -26,6 +26,5 @@ A plataforma permitirá que clientes agendem serviços, realizem pagamentos onli
 ---
 
 ##  Desenvolvedores
-
--André Almeida Silva
--Augusto de Souza Andrade
+- André Almeida Silva
+- Augusto de Souza Andrade
