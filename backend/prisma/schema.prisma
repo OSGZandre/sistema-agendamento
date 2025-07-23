@@ -9,9 +9,9 @@ datasource db {
 
 model Usuario {
   id        Int            @id @default(autoincrement())
-  nome      String
+  nome      String         @db.Text
   email     String         @unique
-  senha     String
+  senha     String         @db.Text
   tipo      TipoUsuario
   criadoEm  DateTime       @default(now())
 }
