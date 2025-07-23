@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/login";
 import Register from "./pages/register";
+import Dono from "./pages/dono";
 
 export default function App() {
   return (
@@ -12,9 +13,14 @@ export default function App() {
           path="/cliente"
           element={<div>Página Cliente (em desenvolvimento)</div>}
         />
+        <Route path="/dono" element={<Dono />} />
         <Route
-          path="/dono"
-          element={<div>Página Dono (em desenvolvimento)</div>}
+          path="/dono/calendario"
+          element={<div>Página Calendário (em desenvolvimento)</div>}
+        />
+        <Route
+          path="/dono/servicos"
+          element={<div>Página Serviços (em desenvolvimento)</div>}
         />
         <Route
           path="/admin"
