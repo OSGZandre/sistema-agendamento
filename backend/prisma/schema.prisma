@@ -14,7 +14,8 @@ model Usuario {
   senha     String         @db.Text
   tipo      TipoUsuario
   criadoEm  DateTime       @default(now())
-  servicos  Servico[]      
+  servicos  Servico[]      // Relacionamento com serviços criados pelo dono
+  agendamentosComoDono    Agendamento[] @relation("donoAgendamento")    // Agendamentos como dono
 }
 
 enum TipoUsuario {
@@ -35,6 +36,18 @@ model Servico {
   donoId            Int
   dono              Usuario        @relation(fields: [donoId], references: [id])
   criadoEm          DateTime       @default(now())
+  agendamentos      Agendamento[]  // Relacionamento com agendamentos
+}
+
+model Agendamento {
+  id        Int      @id @default(autoincrement())
+  data      DateTime // Data e hora do agendamento
+  nomeCliente String @db.Text // Nome do cliente (texto livre)
+  servicoId Int      // Relacionamento com o serviço
+  donoId    Int      // Relacionamento com o dono
+  servico   Servico  @relation(fields: [servicoId], references: [id])
+  dono      Usuario  @relation("donoAgendamento", fields: [donoId], references: [id])
+  criadoEm  DateTime @default(now())
 }
 
 enum MetodoPagamento {

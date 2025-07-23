@@ -3,6 +3,7 @@ import Login from "./pages/login";
 import Register from "./pages/register";
 import Dono from "./pages/dono";
 import Servicos from "./pages/servicos";
+import Calendario from "./pages/calendario";
 
 export default function App() {
   return (
@@ -15,10 +16,7 @@ export default function App() {
           element={<div>Página Cliente (em desenvolvimento)</div>}
         />
         <Route path="/dono" element={<Dono />} />
-        <Route
-          path="/dono/calendario"
-          element={<div>Página Calendário (em desenvolvimento)</div>}
-        />
+        <Route path="/dono/calendario" element={<Calendario />} />
         <Route path="/dono/servicos" element={<Servicos />} />
         <Route
           path="/admin"
