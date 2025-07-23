@@ -14,10 +14,42 @@ model Usuario {
   senha     String         @db.Text
   tipo      TipoUsuario
   criadoEm  DateTime       @default(now())
+  servicos  Servico[]      
 }
 
 enum TipoUsuario {
   CLIENTE
   DONO
   ADMIN
+}
+
+model Servico {
+  id                Int            @id @default(autoincrement())
+  nome              String         @db.Text
+  preco             Float
+  duracao           Int            // Duração em minutos
+  metodosPagamento  MetodoPagamento[]
+  diasDisponiveis   DiaSemana[]
+  horaInicio        String         // Ex.: "08:00"
+  horaFim           String         // Ex.: "20:00"
+  donoId            Int
+  dono              Usuario        @relation(fields: [donoId], references: [id])
+  criadoEm          DateTime       @default(now())
+}
+
+enum MetodoPagamento {
+  PIX
+  CARTAO_DEBITO
+  CARTAO_CREDITO
+  DINHEIRO
+}
+
+enum DiaSemana {
+  SEGUNDA
+  TERCA
+  QUARTA
+  QUINTA
+  SEXTA
+  SABADO
+  DOMINGO
 }

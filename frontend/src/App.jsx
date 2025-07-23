@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import Dono from "./pages/dono";
+import Servicos from "./pages/servicos";
 
 export default function App() {
   return (
@@ -18,10 +19,7 @@ export default function App() {
           path="/dono/calendario"
           element={<div>Página Calendário (em desenvolvimento)</div>}
         />
-        <Route
-          path="/dono/servicos"
-          element={<div>Página Serviços (em desenvolvimento)</div>}
-        />
+        <Route path="/dono/servicos" element={<Servicos />} />
         <Route
           path="/admin"
           element={<div>Página Admin (em desenvolvimento)</div>}

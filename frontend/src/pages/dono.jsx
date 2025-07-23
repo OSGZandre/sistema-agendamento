@@ -27,7 +27,7 @@ export default function Dono() {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Navbar */}
-      <header className="bg-gray-300 text-white shadow">
+      <header className="bg-gray-800 text-white shadow">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-purple-500">
             TemVaga? {usuario.nome}!

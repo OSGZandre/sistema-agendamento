@@ -63,3 +63,15 @@ export async function registrar({ nome, email, senha, tipo }) {
     },
   };
 }
+
+export async function verificarDono(token) {
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    if (decoded.tipo !== "DONO") {
+      throw new Error("Acesso negado: apenas donos podem realizar esta ação");
+    }
+    return decoded.id; // Retorna o ID do dono
+  } catch (erro) {
+    throw new Error("Token inválido ou expirado");
+  }
+}

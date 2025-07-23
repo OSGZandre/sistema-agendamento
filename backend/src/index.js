@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
+import servicoRoutes from "./routes/servicoRoutes.js";
 
 dotenv.config();
 
@@ -10,6 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api", authRoutes);
+app.use("/api/servicos", servicoRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
