@@ -49,6 +49,24 @@ export async function listarServicos(req, res) {
   }
 }
 
+export async function listarServicosPublicos(req, res) {
+  const { donoId } = req.params;
+
+  try {
+    const servicos = await prisma.servico.findMany({
+      where: { donoId: parseInt(donoId) },
+    });
+    if (servicos.length === 0) {
+      return res
+        .status(404)
+        .json({ mensagem: "Nenhum serviço encontrado para este dono" });
+    }
+    res.json(servicos);
+  } catch (erro) {
+    res.status(400).json({ mensagem: erro.message });
+  }
+}
+
 export async function atualizarServico(req, res) {
   const { id } = req.params;
   const {
@@ -64,7 +82,7 @@ export async function atualizarServico(req, res) {
 
   try {
     const donoId = await verificarDono(token);
-    const servicoId = parseInt(id); // Converte o id de string para Int
+    const servicoId = parseInt(id);
     if (isNaN(servicoId)) {
       throw new Error("ID inválido");
     }
@@ -98,7 +116,7 @@ export async function excluirServico(req, res) {
 
   try {
     const donoId = await verificarDono(token);
-    const servicoId = parseInt(id); // Converte o id de string para Int
+    const servicoId = parseInt(id);
     if (isNaN(servicoId)) {
       throw new Error("ID inválido");
     }

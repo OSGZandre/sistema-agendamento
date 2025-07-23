@@ -1,26 +1,24 @@
 import { PrismaClient } from "@prisma/client";
-import { verificarDono } from "../services/authService.js";
+import { verificarDono } from "../services/authService.js"; // Importação explícita
 
 const prisma = new PrismaClient();
 
 export async function criarAgendamento(req, res) {
-  const { data, nomeCliente, servicoId } = req.body;
-  const token = req.headers.authorization?.split(" ")[1];
+  const { data, nomeCliente, servicoId, donoId } = req.body;
 
   try {
-    const donoId = await verificarDono(token);
     const servico = await prisma.servico.findUnique({
       where: { id: parseInt(servicoId) },
     });
-    if (!servico || servico.donoId !== donoId) {
-      throw new Error("Serviço não encontrado ou você não tem permissão");
+    if (!servico || servico.donoId !== parseInt(donoId)) {
+      throw new Error("Serviço não encontrado ou não pertence a este dono");
     }
     const agendamento = await prisma.agendamento.create({
       data: {
         data: new Date(data),
         nomeCliente: nomeCliente || "Cliente não informado",
         servicoId: parseInt(servicoId),
-        donoId,
+        donoId: parseInt(donoId),
       },
       include: { servico: true },
     });
@@ -34,6 +32,11 @@ export async function listarAgendamentos(req, res) {
   const token = req.headers.authorization?.split(" ")[1];
 
   try {
+    if (!token) {
+      return res
+        .status(401)
+        .json({ mensagem: "Token de autenticação não fornecido" });
+    }
     const donoId = await verificarDono(token);
     const agendamentos = await prisma.agendamento.findMany({
       where: { donoId },
