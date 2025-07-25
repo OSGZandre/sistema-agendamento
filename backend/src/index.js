@@ -4,12 +4,20 @@ import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import servicoRoutes from "./routes/servicoRoutes.js";
 import agendamentoRoutes from "./routes/agendamentoRoutes.js";
+import perfilRoutes from "./routes/perfilRoutes.js";
+import bodyParser from "body-parser";
+import multer from "multer";
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
+app.use(bodyParser.json({ limit: "10mb" }));
+app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 app.use(express.json());
+
+const upload = multer({ limits: { fileSize: 10 * 1024 * 1024 } });
+app.use("/api/perfil", upload.single("fotoPerfil"), perfilRoutes);
 
 app.use("/api", authRoutes);
 app.use("/api/servicos", servicoRoutes);

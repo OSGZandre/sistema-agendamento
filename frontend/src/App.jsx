@@ -5,6 +5,7 @@ import Dono from "./pages/dono";
 import Servicos from "./pages/servicos";
 import Calendario from "./pages/calendario";
 import Agendar from "./pages/agendar";
+import Conta from "./pages/conta"; // Importe a página Conta
 
 export default function App() {
   return (
@@ -20,6 +21,8 @@ export default function App() {
         <Route path="/dono/calendario" element={<Calendario />} />
         <Route path="/dono/servicos" element={<Servicos />} />
         <Route path="/agendar/:donoId" element={<Agendar />} />
+        <Route path="/conta/:donoId" element={<Conta />} />{" "}
+        {/* Adicione esta rota */}
         <Route
           path="/admin"
           element={<div>Página Admin (em desenvolvimento)</div>}

@@ -135,8 +135,8 @@ export default function Calendario() {
           </h1>
           <div className="flex gap-2">
             <button
-                onClick={handleLogout}
-                className="bg-transparent text-black px-4 py-2 rounded-xl border-2 border-[#3E57B3] hover:bg-[#A7B4E3]"
+              onClick={() => navigate("/dono")}
+              className="bg-transparent text-black px-4 py-2 rounded-xl border-2 border-[#3E57B3] hover:bg-[#A7B4E3]"
             >
               Voltar
             </button>
