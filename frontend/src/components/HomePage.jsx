@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/react.svg";
 
-const Navbar = () => {
+const HomePage = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [usuario, setUsuario] = useState(null);
@@ -21,20 +21,12 @@ const Navbar = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleContaClick = () => {
-    if (usuario && usuario.id) {
-      navigate(`/conta/${usuario.id}`);
-    } else {
-      navigate("/login");
-    }
-  };
-
   return (
     <header className="relative flex flex-col items-center w-full bg-gray-800 text-sm py-3">
       <div className="max-w-[85rem] w-full mx-auto px-4 flex flex-row sm:justify-center items-center mb-4">
         <a
           className="flex-none text-xl font-semibold dark:text-white focus:outline-none focus:opacity-80 sm:flex sm:justify-center"
-          href="/dono"
+          href="/"
           aria-label="Brand"
         >
           <span className="inline-flex items-center gap-x-2 text-xl font-semibold text-white">
@@ -72,43 +64,37 @@ const Navbar = () => {
       >
         <div className="flex flex-col items-center gap-2 sm:flex-row sm:items-center sm:justify-center sm:gap-5">
           <a
-            onClick={() => navigate("/dono/servicos")}
+            onClick={() => navigate("/sobre")}
             className="font-medium text-white hover:text-gray-500 focus:outline-none w-full text-center sm:w-auto"
             aria-current="page"
           >
-            Serviços
+            Sobre
           </a>
           <span className="text-gray-400 dark:text-neutral-500 sm:inline hidden">
             *
           </span>
           <a
-            onClick={() => navigate("/dono/calendario")}
+            onClick={() => navigate("/register")}
             className="font-medium text-white hover:text-gray-500 focus:outline-none focus:text-gray-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500 w-full text-center sm:w-auto"
           >
-            Calendário
+            Quero castrar meu negócio
           </a>
           <span className="text-gray-400 dark:text-neutral-500 sm:inline hidden">
             *
           </span>
           <a
-            onClick={handleContaClick}
+            onClick={() => navigate("/login")}
             className="font-medium text-white hover:text-gray-500 focus:outline-none focus:text-gray-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500 w-full text-center sm:w-auto"
           >
-            Conta
+            Login
           </a>
           <span className="text-gray-400 dark:text-neutral-500 sm:inline hidden">
             *
           </span>
-          <a
-            onClick={handleLogout}
-            className="font-medium text-white hover:text-gray-500 focus:outline-none focus:text-gray-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500 w-full text-center sm:w-auto"
-          >
-            Sair
-          </a>
         </div>
       </nav>
     </header>
   );
 };
 
-export default Navbar;
+export default HomePage;
