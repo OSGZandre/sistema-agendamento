@@ -1,113 +1,120 @@
 import { PrismaClient } from "@prisma/client";
 import { verificarDono } from "../services/authService.js";
 import bcrypt from "bcrypt";
-import express from "express"; // Importe express pra usar o middleware
+import express from "express";
+import multer from "multer";
 
 const prisma = new PrismaClient();
-const app = express(); // Instância pra usar middleware
+const app = express();
+const upload = multer({ limits: { fileSize: 10 * 1024 * 1024 } });
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.raw({ type: "image/*", limit: "10mb" })); // Suporte a imagens
+app.use(express.raw({ type: "image/*", limit: "10mb" }));
+app.use(upload.single("fotoPerfil"));
 
 export async function getPerfilDono(req, res) {
-  const { donoId } = req.params;
-  const token = req.headers.authorization?.split(" ")[1];
-
-  console.log(
-    `Requisição GET /api/perfil/dono/${donoId} recebida. Token: ${
-      token || "não fornecido"
-    }`
-  );
-
+  const donoId = parseInt(req.params.donoId);
   try {
-    if (!token) {
-      console.log("Erro: Token de autenticação não fornecido");
-      return res
-        .status(401)
-        .json({ mensagem: "Token de autenticação não fornecido" });
-    }
-    const donoIdNum = await verificarDono(token);
-    console.log(`Dono autenticado: ${donoIdNum}`);
-    if (parseInt(donoId) !== donoIdNum) {
-      console.log("Erro: Acesso não autorizado para donoId", donoId);
-      return res.status(403).json({ mensagem: "Acesso não autorizado" });
-    }
-    const perfil = await prisma.usuario.findUnique({
-      where: { id: parseInt(donoId) },
+    const usuario = await prisma.usuario.findUnique({
+      where: { id: donoId },
       select: {
         id: true,
-        email: true,
         nome: true,
+        email: true,
         telefone: true,
         endereco: true,
         descricaoNegocio: true,
         fotoPerfil: true,
-        tipo: true,
       },
     });
-    if (!perfil || perfil.tipo !== "DONO") {
-      console.log("Erro: Dono não encontrado ou tipo inválido para id", donoId);
+    if (!usuario) {
       return res.status(404).json({ mensagem: "Dono não encontrado" });
     }
-    console.log("Perfil encontrado:", perfil);
-    res.json(perfil);
+    res.json(usuario);
   } catch (erro) {
     console.error("Erro ao buscar perfil:", erro.message);
-    res.status(400).json({ mensagem: erro.message });
+    res.status(500).json({ mensagem: "Erro interno do servidor" });
   }
 }
 
 export async function updatePerfilDono(req, res) {
-  const { donoId } = req.params;
-  const token = req.headers.authorization?.split(" ")[1];
-
-  console.log(
-    `Requisição PUT /api/perfil/dono/${donoId} recebida. Dados brutos:`,
-    req.body,
-    "Arquivo:",
-    req.file
-  );
+  const donoId = parseInt(req.params.donoId);
+  const { email, nome, telefone, endereco, descricaoNegocio, senha } = req.body;
+  let fotoPerfil = req.file
+    ? req.file.buffer.toString("base64")
+    : req.body.fotoPerfil;
 
   try {
-    if (!token) {
-      console.log("Erro: Token de autenticação não fornecido");
-      return res
-        .status(401)
-        .json({ mensagem: "Token de autenticação não fornecido" });
-    }
-    const donoIdNum = await verificarDono(token);
-    console.log(`Dono autenticado: ${donoIdNum}`);
-    if (parseInt(donoId) !== donoIdNum) {
-      console.log("Erro: Acesso não autorizado para donoId", donoId);
-      return res.status(403).json({ mensagem: "Acesso não autorizado" });
+    const usuario = await prisma.usuario.findUnique({ where: { id: donoId } });
+    if (!usuario) {
+      return res.status(404).json({ mensagem: "Dono não encontrado" });
     }
 
-    const { email, senha, nome, telefone, endereco, descricaoNegocio } =
-      req.body;
-    let fotoPerfil = req.file
-      ? req.file.buffer.toString("base64")
-      : req.body.fotoPerfil;
-
-    const dadosAtualizados = {
-      email,
-      nome,
-      telefone,
-      endereco,
-      descricaoNegocio,
-    };
+    const dataToUpdate = { email, nome, telefone, endereco, descricaoNegocio };
     if (senha) {
-      dadosAtualizados.senha = await bcrypt.hash(senha, 10);
+      dataToUpdate.senha = await bcrypt.hash(senha, 10);
     }
     if (fotoPerfil) {
-      dadosAtualizados.fotoPerfil = fotoPerfil;
+      dataToUpdate.fotoPerfil = fotoPerfil;
     }
 
-    const perfilAtualizado = await prisma.usuario.update({
-      where: { id: parseInt(donoId) },
-      data: dadosAtualizados,
+    const updatedUsuario = await prisma.usuario.update({
+      where: { id: donoId },
+      data: dataToUpdate,
       select: {
         id: true,
+        nome: true,
         email: true,
+        telefone: true,
+        endereco: true,
+        descricaoNegocio: true,
+        fotoPerfil: true,
+      },
+    });
+
+    res.json({
+      mensagem: "Perfil atualizado com sucesso",
+      usuario: updatedUsuario,
+    });
+  } catch (erro) {
+    console.error("Erro ao atualizar perfil:", erro.message);
+    res.status(400).json({ mensagem: erro.message });
+  }
+}
+
+export async function createBusiness(req, res) {
+  const { email, nome, telefone, endereco, descricaoNegocio } = req.body;
+  let fotoPerfil = req.file
+    ? req.file.buffer.toString("base64")
+    : req.body.fotoPerfil;
+
+  try {
+    const token = req.headers.authorization?.split(" ")[1]; // Extrai o token do Bearer
+    if (!token) {
+      return res
+        .status(401)
+        .json({ mensagem: "Token de autenticação ausente" });
+    }
+
+    const donoId = await verificarDono(token); // Verifica se é dono
+    const usuario = await prisma.usuario.findUnique({ where: { id: donoId } });
+    if (!usuario || usuario.tipo !== "DONO") {
+      return res
+        .status(403)
+        .json({ mensagem: "Acesso negado ou usuário não é dono" });
+    }
+
+    if (usuario.descricaoNegocio || usuario.fotoPerfil) {
+      return res
+        .status(400)
+        .json({ mensagem: "Negócio já cadastrado para este dono" });
+    }
+
+    const negocio = await prisma.usuario.update({
+      where: { id: donoId },
+      data: { nome, telefone, endereco, descricaoNegocio, fotoPerfil },
+      select: {
+        id: true,
         nome: true,
         telefone: true,
         endereco: true,
@@ -115,10 +122,10 @@ export async function updatePerfilDono(req, res) {
         fotoPerfil: true,
       },
     });
-    console.log("Perfil atualizado:", perfilAtualizado);
-    res.json(perfilAtualizado);
+
+    res.status(201).json({ mensagem: "Negócio criado com sucesso", negocio });
   } catch (erro) {
-    console.error("Erro ao atualizar perfil:", erro.message);
+    console.error("Erro ao criar negócio:", erro.message);
     res.status(400).json({ mensagem: erro.message });
   }
 }

@@ -3,7 +3,7 @@ import { login, register } from "../controllers/authController.js";
 
 const router = Router();
 
-router.post("/login", login);
-router.post("/register", register);
+router.post("/auth/login", login);
+router.post("/auth/register", register);
 
 export default router;

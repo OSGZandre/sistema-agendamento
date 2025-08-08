@@ -17,6 +17,7 @@ model Usuario {
   endereco             String?       @db.Text
   descricaoNegocio     String?       @db.Text
   fotoPerfil           String?       @db.Text
+  pagamentoConfirmado  Boolean       @default(false) 
   criadoEm             DateTime      @default(now())
   servicos             Servico[]     @relation("donoServico")
   agendamentosComoDono Agendamento[] @relation("donoAgendamento")

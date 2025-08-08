@@ -6,22 +6,20 @@ import Servicos from "./pages/servicos";
 import Calendario from "./pages/calendario";
 import Agendar from "./pages/agendar";
 import Conta from "./pages/conta";
-import Home from "./pages/Home"; // Importe a nova página Home
+import Home from "./pages/Home";
+import CreateBusiness from "./pages/CreateBusiness"; // Corrigido para maiúscula
+import Payment from "./pages/Payment";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} /> {/* Página inicial */}
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route
           path="/cliente"
           element={<div>Página Cliente (em desenvolvimento)</div>}
-        />
-        <Route
-          path="/sobre"
-          element={<div>Página sobre (em desenvolvimento)</div>}
         />
         <Route path="/dono" element={<Dono />} />
         <Route path="/dono/calendario" element={<Calendario />} />
@@ -32,6 +30,8 @@ export default function App() {
           path="/admin"
           element={<div>Página Admin (em desenvolvimento)</div>}
         />
+        <Route path="/create-business/:email" element={<CreateBusiness />} />
+        <Route path="/payment" element={<Payment />} />
       </Routes>
     </BrowserRouter>
   );

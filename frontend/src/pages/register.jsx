@@ -1,25 +1,39 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import api from "../services/api";
 import FormRegister from "../components/FormRegister";
 
 export default function Register() {
   const [erro, setErro] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const tipo = searchParams.get("tipo");
+    if (tipo === "DONO") {
+      // Define o tipo como DONO no FormRegister via prop, se vier do query
+      document.getElementById("tipoSelect")?.setAttribute("value", "DONO");
+    }
+  }, [location.search]);
 
   const handleRegister = async ({ nome, email, senha, tipo }) => {
     try {
-      const response = await api.post("/register", {
+      const response = await api.post("/api/auth/register", {
         nome,
         email,
         senha,
         tipo,
       });
-      console.log("Resposta do backend:", response.data); // Log pra debugar
+      console.log("Resposta do backend:", response.data);
       const { token, usuario } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem("usuario", JSON.stringify(usuario));
-      navigate("/login"); // Redireciona pro login após cadastro
+      if (tipo === "DONO") {
+        navigate(`/create-business/${email}`);
+      } else {
+        navigate("/login");
+      }
     } catch (err) {
       console.log("Erro no registro:", err.response?.data, err.message);
       setErro(err.response?.data.mensagem || "Erro ao registrar");

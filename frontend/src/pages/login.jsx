@@ -9,13 +9,17 @@ export default function Login() {
 
   const handleLogin = async ({ email, senha }) => {
     try {
-      const response = await api.post("/login", { email, senha });
-      console.log("Resposta do backend:", response.data); // Log pra debugar
+      const response = await api.post("/api/auth/login", {
+        // Adicionado /api
+        email,
+        senha,
+      });
+      console.log("Resposta do backend:", response.data);
       const { token, usuario } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem("usuario", JSON.stringify(usuario));
 
-      console.log("Tipo do usuário:", usuario.tipo); // Log do tipo
+      console.log("Tipo do usuário:", usuario.tipo);
       if (usuario.tipo === "CLIENTE") {
         navigate("/cliente");
       } else if (usuario.tipo === "DONO") {
