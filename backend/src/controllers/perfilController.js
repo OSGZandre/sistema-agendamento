@@ -25,6 +25,7 @@ export async function getPerfilDono(req, res) {
         endereco: true,
         descricaoNegocio: true,
         fotoPerfil: true,
+        pagamentoConfirmado: true,
       },
     });
     if (!usuario) {
