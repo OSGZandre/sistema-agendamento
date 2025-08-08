@@ -25,13 +25,15 @@ export default function Dono() {
       const config = token
         ? { headers: { Authorization: `Bearer ${token}` } }
         : {};
-      const response = await api.get(`/perfil/dono/${id}`, config);
+      const response = await api.get(`/api/perfil/dono/${id}`, config);
+      console.log("Resposta da API:", response.data);
+      console.log("pagamentoConfirmado:", response.data.pagamentoConfirmado);
       if (!response.data.pagamentoConfirmado) {
-        navigate("/payment"); // Redireciona pra página de pagamento se não pagou
+        navigate("/payment");
       }
     } catch (err) {
       console.log("Erro ao verificar pagamento:", err.response?.data);
-      navigate("/payment"); // Redireciona em caso de erro também
+      navigate("/payment");
     }
   };
 

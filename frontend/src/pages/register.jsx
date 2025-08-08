@@ -12,7 +12,6 @@ export default function Register() {
     const searchParams = new URLSearchParams(location.search);
     const tipo = searchParams.get("tipo");
     if (tipo === "DONO") {
-      // Define o tipo como DONO no FormRegister via prop, se vier do query
       document.getElementById("tipoSelect")?.setAttribute("value", "DONO");
     }
   }, [location.search]);

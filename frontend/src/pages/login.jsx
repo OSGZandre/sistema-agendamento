@@ -10,7 +10,6 @@ export default function Login() {
   const handleLogin = async ({ email, senha }) => {
     try {
       const response = await api.post("/api/auth/login", {
-        // Adicionado /api
         email,
         senha,
       });

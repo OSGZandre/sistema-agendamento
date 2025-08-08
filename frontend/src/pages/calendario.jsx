@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
-
+import Navbar from "../components/Navbar";
 export default function Calendario() {
   const navigate = useNavigate();
   const [usuario, setUsuario] = useState(null);
@@ -27,7 +27,7 @@ export default function Calendario() {
   const fetchAgendamentos = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await api.get("/agendamentos", {
+      const response = await api.get("/api/agendamentos", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setAgendamentos(response.data);
@@ -40,7 +40,7 @@ export default function Calendario() {
   const fetchServicos = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await api.get("/servicos", {
+      const response = await api.get("/api/servicos", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setServicos(response.data);
@@ -56,7 +56,7 @@ export default function Calendario() {
       const token = localStorage.getItem("token");
       if (editando) {
         const response = await api.put(
-          `/agendamentos/${editando.id}`,
+          `/api/agendamentos/${editando.id}`,
           {
             data,
             nomeCliente,
@@ -70,7 +70,7 @@ export default function Calendario() {
         resetForm();
       } else {
         const response = await api.post(
-          "/agendamentos",
+          "/api/agendamentos",
           {
             data,
             nomeCliente,
@@ -98,7 +98,8 @@ export default function Calendario() {
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      await api.delete(`/agendamentos/${id}`, {
+      await api.delete(`/api/agendamentos/${id}`, {
+        // Ajustado pra /api
         headers: { Authorization: `Bearer ${token}` },
       });
       setAgendamentos(agendamentos.filter((a) => a.id !== id));
@@ -128,21 +129,7 @@ export default function Calendario() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="bg-transparent text-black border-b-2 border-[#3E57B3] p-4">
-        <div className="max-w-5xl mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold">
-            Gerenciar Serviços - {usuario.nome}
-          </h1>
-          <div className="flex gap-2">
-            <button
-              onClick={() => navigate("/dono")}
-              className="bg-transparent text-black px-4 py-2 rounded-xl border-2 border-[#3E57B3] hover:bg-[#A7B4E3]"
-            >
-              Voltar
-            </button>
-          </div>
-        </div>
-      </header>
+      <Navbar />
 
       <main className="max-w-7xl mx-auto p-6">
         <h2 className="text-xl font-bold mb-4">

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
-
+import Navbar from "../components/Navbar";
 export default function Servicos() {
   const navigate = useNavigate();
   const [usuario, setUsuario] = useState(null);
@@ -29,7 +29,7 @@ export default function Servicos() {
   const fetchServicos = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await api.get("/servicos", {
+      const response = await api.get("/api/servicos", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setServicos(response.data);
@@ -53,7 +53,7 @@ export default function Servicos() {
     try {
       const token = localStorage.getItem("token");
       if (editando) {
-        const response = await api.put(`/servicos/${editando.id}`, data, {
+        const response = await api.put(`/api/servicos/${editando.id}`, data, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setServicos(
@@ -61,7 +61,8 @@ export default function Servicos() {
         );
         setEditando(null);
       } else {
-        const response = await api.post("/servicos", data, {
+        const response = await api.post("/api/servicos", data, {
+          // Ajustado pra /api
           headers: { Authorization: `Bearer ${token}` },
         });
         setServicos([...servicos, response.data]);
@@ -88,7 +89,8 @@ export default function Servicos() {
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      await api.delete(`/servicos/${id}`, {
+      await api.delete(`/api/servicos/${id}`, {
+        // Ajustado pra /api
         headers: { Authorization: `Bearer ${token}` },
       });
       setServicos(servicos.filter((s) => s.id !== id));
@@ -120,21 +122,7 @@ export default function Servicos() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
-      <header className="bg-transparent text-black border-b-2 border-[#3E57B3] p-4">
-        <div className="max-w-5xl mx-auto flex flex-row items-center justify-between gap-4">
-          <h1 className="text-2xl font-bold flex-1 min-w-0 break-words">
-            Gerenciar Serviços - {usuario.nome}
-          </h1>
-          <div className="flex-shrink-0">
-            <button
-              onClick={() => navigate("/dono")}
-              className="bg-transparent text-black px-4 py-2 rounded-xl border-2 border-[#3E57B3] hover:bg-[#A7B4E3]"
-            >
-              Voltar
-            </button>
-          </div>
-        </div>
-      </header>
+      <Navbar />
 
       <main className="max-w-8xl mx-auto p-6 flex flex-col md:flex-row gap-6 flex-1 h-full">
         <div className="w-full md:w-1/2 bg-white p-6 rounded-xl shadow border-[#3E57B3] border-2 h-full">
