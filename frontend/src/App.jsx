@@ -7,8 +7,9 @@ import Calendario from "./pages/calendario";
 import Agendar from "./pages/agendar";
 import Conta from "./pages/conta";
 import Home from "./pages/Home";
-import CreateBusiness from "./pages/CreateBusiness"; // Corrigido para maiúscula
+import CreateBusiness from "./pages/CreateBusiness";
 import Payment from "./pages/Payment";
+import Caixa from "./pages/caixa";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
           path="/cliente"
           element={<div>Página Cliente (em desenvolvimento)</div>}
         />
+        <Route path="/dono/caixa" element={<Caixa />} />
         <Route path="/dono" element={<Dono />} />
         <Route path="/dono/calendario" element={<Calendario />} />
         <Route path="/dono/servicos" element={<Servicos />} />

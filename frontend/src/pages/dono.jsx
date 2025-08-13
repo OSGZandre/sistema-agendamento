@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import calendario from "../img/calendario.jpg";
 import servicos from "../img/servicos.jpg";
-import api from "../services/api";
+import caixa from "../img/caixa.jpeg";
 
 export default function Dono() {
   const navigate = useNavigate();
@@ -15,27 +15,8 @@ export default function Dono() {
       navigate("/login");
     } else {
       setUsuario(usuarioData);
-      verificarPagamento(usuarioData.id);
     }
   }, [navigate]);
-
-  const verificarPagamento = async (id) => {
-    try {
-      const token = localStorage.getItem("token");
-      const config = token
-        ? { headers: { Authorization: `Bearer ${token}` } }
-        : {};
-      const response = await api.get(`/api/perfil/dono/${id}`, config);
-      console.log("Resposta da API:", response.data);
-      console.log("pagamentoConfirmado:", response.data.pagamentoConfirmado);
-      if (!response.data.pagamentoConfirmado) {
-        navigate("/payment");
-      }
-    } catch (err) {
-      console.log("Erro ao verificar pagamento:", err.response?.data);
-      navigate("/payment");
-    }
-  };
 
   if (!usuario) {
     return <div>Carregando...</div>;
@@ -44,10 +25,14 @@ export default function Dono() {
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />
+
+      {/* Conteúdo principal */}
       <main className="max-w-5xl mx-auto p-6">
         <h2 className="text-xl font-bold mb-4">Gerencie seu Negócio</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-gray-100 p-6 rounded-xl shadow border-2 border-[#3E57B3]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {" "}
+          {/* Alterado pra 3 colunas */}
+          <div className="bg-gray-100 p-6 rounded-xl shadow shadow border-2 border-[#3E57B3]">
             <img
               src={calendario}
               alt="Calendário"
@@ -56,7 +41,7 @@ export default function Dono() {
             <h3 className="text-lg font-semibold mb-2">
               Calendário de Agendamentos
             </h3>
-            <p className="text-gray-600 mb-4">
+            <p className="text-gray-600 mb-4 ">
               Veja e gerencie os agendamentos dos seus clientes.
             </p>
             <button
@@ -81,6 +66,23 @@ export default function Dono() {
               className="w-full border-2 border-[#3E57B3] bg-transparent text-black p-2 rounded-xl hover:bg-[#A7B4E3]"
             >
               Gerenciar Serviços
+            </button>
+          </div>
+          <div className="bg-gray-100 p-6 rounded-xl shadow border-2 border-[#3E57B3]">
+            <img
+              src={caixa}
+              alt="Caixa"
+              className="w-full h-40 object-cover rounded mb-4"
+            />
+            <h3 className="text-lg font-semibold mb-2">Controle de Caixa</h3>
+            <p className="text-gray-600 mb-4">
+              Abra o caixa, finalize agendamentos e adicione vendas extras.
+            </p>
+            <button
+              onClick={() => navigate("/dono/caixa")}
+              className="w-full border-2 border-[#3E57B3] bg-transparent text-black p-2 rounded-xl hover:bg-[#A7B4E3]"
+            >
+              Acessar Caixa
             </button>
           </div>
         </div>

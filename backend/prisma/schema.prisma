@@ -17,10 +17,12 @@ model Usuario {
   endereco             String?       @db.Text
   descricaoNegocio     String?       @db.Text
   fotoPerfil           String?       @db.Text
-  pagamentoConfirmado  Boolean       @default(false) 
+  pagamentoConfirmado  Boolean       @default(false)
   criadoEm             DateTime      @default(now())
   servicos             Servico[]     @relation("donoServico")
   agendamentosComoDono Agendamento[] @relation("donoAgendamento")
+  produtos             Produto[]     @relation("donoProduto") // Nova relação
+  caixas               Caixa[]       @relation("donoCaixa")   // Nova relação
 }
 
 enum TipoUsuario {
@@ -53,6 +55,41 @@ model Agendamento {
   servico     Servico  @relation(fields: [servicoId], references: [id])
   dono        Usuario  @relation("donoAgendamento", fields: [donoId], references: [id])
   criadoEm    DateTime @default(now())
+}
+
+model Produto {
+  id          Int      @id @default(autoincrement())
+  nome        String   @db.Text
+  preco       Float
+  descricao   String?  @db.Text
+  disponivel  Boolean  @default(true)
+  estoque     Int?     @default(0) // Opcional, pra rastrear estoque
+  donoId      Int
+  dono        Usuario  @relation("donoProduto", fields: [donoId], references: [id])
+  criadoEm    DateTime @default(now())
+}
+
+model Caixa {
+  id             Int      @id @default(autoincrement())
+  donoId         Int
+  dataAbertura   DateTime @default(now())
+  dataFechamento DateTime? // Data de fechamento (null se aberto)
+  suprimento     Float    @default(0.0) // Troco inicial
+  totalVendas     Float    @default(0.0) // Total acumulado
+  aberto         Boolean  @default(true) // Status do caixa
+  dono           Usuario  @relation("donoCaixa", fields: [donoId], references: [id])
+  pagamentos     Pagamento[] // Relação com pagamentos
+}
+
+model Pagamento {
+  id           Int      @id @default(autoincrement())
+  caixaId      Int
+  agendamentoId Int?     // Opcional, se associado a agendamento
+  produtoId    Int?     // Opcional, se venda extra
+  valor        Float
+  metodo       MetodoPagamento
+  data         DateTime @default(now())
+  caixa        Caixa    @relation(fields: [caixaId], references: [id])
 }
 
 enum MetodoPagamento {

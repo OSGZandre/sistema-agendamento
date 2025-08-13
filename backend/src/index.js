@@ -5,6 +5,7 @@ import authRoutes from "./routes/authRoutes.js";
 import servicoRoutes from "./routes/servicoRoutes.js";
 import agendamentoRoutes from "./routes/agendamentoRoutes.js";
 import perfilRoutes from "./routes/perfilRoutes.js";
+import caixaRoutes from "./routes/caixaRoutes.js"; // Nova rota
 import bodyParser from "body-parser";
 import multer from "multer";
 
@@ -22,6 +23,7 @@ app.use("/api/perfil", upload.single("fotoPerfil"), perfilRoutes);
 app.use("/api", authRoutes);
 app.use("/api/servicos", servicoRoutes);
 app.use("/api/agendamentos", agendamentoRoutes);
+app.use("/api/caixa", caixaRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
